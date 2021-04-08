@@ -3,7 +3,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import javax.swing.*;
 
-public class Assig5
+public class Assig6
 {
     // static for the 57 icons and their corresponding labels
     // normally we would not have a separate label for each card, but
