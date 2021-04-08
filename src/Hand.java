@@ -1,0 +1,124 @@
+/**
+ * Lab 3: Decks of Cards
+ * CST 338: Software Design (Spring B 2021)
+ *
+ * The Hand class defines what hand the player was dealt by
+ * the dealer. It uses the Card class to define the cards.
+ */
+public class Hand
+{
+   public final int MAX_CARDS = 54;
+   Card[] myCards;
+   int numCards;
+   public Hand()
+   {
+      numCards = 0;
+      myCards = new Card[MAX_CARDS];
+   }
+   //Public methods
+   /**
+    * Method to remove all cards from hand. Resets
+    * the array index to 0.
+    */
+   public void resetHand()
+   {
+      numCards = 0;
+   }
+   /**
+    * Method to add a new card to the hand.
+    * Adds an object copy of the card to the
+    * current array position and increments numCards.
+    *
+    * @param card The card to add to the hand
+    * @return false if an invalid card was pulled, otherwise true
+    */
+   public boolean takeCard(Card card)
+   {
+      if(card.errorFlag() == true || card == null || numCards == MAX_CARDS)
+      {
+         return false;
+      }
+      else
+      {
+         myCards[numCards++] = new Card(card.getValue(),card.getSuit());
+         return true;
+      }
+   }
+   /**
+    * Returns and removes the top card to be played.
+    * Decrements numCards and returns a new card
+    * object with copied values.
+    * Updated for lab 5 using the provided code
+    *
+    * @return The card to be played
+    */
+    public Card playCard(int cardIndex)
+    {
+       if ( numCards == 0 ) //error
+       {
+          //Creates a card that does not work
+          return new Card('M', Card.Suit.SPADES);
+       }
+       //Decreases numCards.
+       Card card = myCards[cardIndex];
+       
+       numCards--;
+       for(int i = cardIndex; i < numCards; i++)
+       {
+          myCards[i] = myCards[i+1];
+       }
+       
+       myCards[numCards] = null;
+       
+       return card;
+     }
+   /**
+    * Method to return the full hand as a string
+    */
+   public String toString()
+   {
+      String str = "";
+      for(int i = 0; i < numCards; i++)
+      {
+         //checks if last card which doesn't need comma
+         if(i == numCards - 1)
+         {
+            str += myCards[i].getValue() + " of " + myCards[i].getSuit();
+         }
+         else
+         {
+            str += myCards[i].getValue() + " of " + myCards[i].getSuit() + ", ";
+         }
+      }
+      return str;
+   }
+
+   //Accessors
+   public int getNumCards()
+   {
+      return numCards;
+   }
+   /**
+    * An accessor method for a card at index k.
+    * If the requested card does not exist, return
+    * an invalid card.
+    *
+    * @param k The array index
+    * @return The card at index k or an invalid card
+    */
+   public Card inspectCard(int k)
+   {
+      if(k < 0 || k > MAX_CARDS || myCards[k] == null)
+      {
+         return new Card('W', Card.Suit.SPADES);
+      }
+      else
+      {
+         return new Card(myCards[k].getValue(), myCards[k].getSuit());
+      }
+   }
+
+   public void sort() {
+      Card.arraySort(myCards, numCards);
+   }
+}
