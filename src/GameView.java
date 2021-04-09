@@ -46,8 +46,9 @@ class GameView extends JFrame {
     //Accessors
     public int getNumCardsPerHand() { return numCardsPerHand; }
     public int getNumPlayers() { return numPlayers; }
-    
-    public class GUICard {
+}
+// MIKE: We can't have 2 public classes in one file, we may have to declare this private OR combine into one class
+public class GUICard {
     private static Icon[][] iconCards = new ImageIcon[14][4]; // 14 = A thru K + joker
     private static Icon iconBack;
     static boolean iconsLoaded = false;
@@ -60,7 +61,7 @@ class GameView extends JFrame {
         if (iconsLoaded) return;
         for (int j = 0; j < 4; j++) {
             for (int k = 0; k < 14; k++) {
-                String fileName = "images/" + Assig5.turnIntIntoCardValue(k) +
+                String fileName = "images/" + Assig5.turnIntIntoCardValue(k) + // Referring to Assig5 here, these methods are currently in the GUICard class
                         Assig5.turnIntIntoCardSuit(j) + ".gif";
                 iconCards[k][j] = new ImageIcon(fileName);
             }
@@ -131,5 +132,5 @@ class GameView extends JFrame {
                 return --charToInt;
         }
     }
-} 
-}
+    } 
+
