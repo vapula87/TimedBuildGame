@@ -47,8 +47,8 @@ class GameView extends JFrame {
     public int getNumCardsPerHand() { return numCardsPerHand; }
     public int getNumPlayers() { return numPlayers; }
 }
-// MIKE: We can't have 2 public classes in one file, we may have to declare this private OR combine into one class
-public class GUICard {
+
+class GUICard {
     private static Icon[][] iconCards = new ImageIcon[14][4]; // 14 = A thru K + joker
     private static Icon iconBack;
     static boolean iconsLoaded = false;
