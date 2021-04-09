@@ -16,12 +16,17 @@ class GameModel
     // in the game.  e.g. pinochle does not
     // use cards 2-8 of any suit
 
-    public GameModel
-    {
-        this.gameModel = new CardGmeOutline(int numPacks, int numJokersPerPack,
+    public GameModel { // MIKE: Is this meant to be a parameterized constructor?
+    // should be public GameModel(int numPacks, int numJokersPerPack, 
+    // int numUnusedCardsPerPack,  Card[] unusedCardsPerPack,
+    // int numPlayers, int numCardsPerHand))
+    
+        // we don't need this, the code here is the same as CardGameOutline
+        // Ultimately, we should not have to rely on a seperate CardGameOutline class
+         this.gameModel = new CardGameOutline(int numPacks, int numJokersPerPack,
                             int numUnusedCardsPerPack,  Card[] unusedCardsPerPack,
-                            int numPlayers, int numCardsPerHand)
-    }
+                            int numPlayers, int numCardsPerHand); 
+    
         int k;
 
         // filter bad values

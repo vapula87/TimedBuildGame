@@ -31,7 +31,8 @@ class GameController
      */
     public static Card randomCardGenerator() {
         // Use the methods above to get a random card and assign to string
-        String randomSuit = turnIntIntoCardSuit((int) (Math.random() * 3));
+        // MIKE: turnIntIntoCardSuit is inaccessible from here, currently in GUICard class
+        String randomSuit = turnIntIntoCardSuit((int) (Math.random() * 3));     
         String randomValue = turnIntIntoCardValue((int) (Math.random() * 13));
         // Determine the suit of the random card from the string 
         Card.Suit suit = null;
@@ -76,6 +77,7 @@ class GameController
         highCardGame.deal();
         
         //Decide winner and display the score of the game
+        // MIKE: bestCard and highCard don't exist anywhere else currently
         if (bestCard > highCard) computerScore++;
         else playerScore++;
         updateGame();
