@@ -23,35 +23,6 @@ class GameController
     static int playerScore = 0, computerScore = 0;
     static int computerCards[] = new int[NUM_CARDS_PER_HAND];
 
-    /*
-     * Build the file names. For each file name, read it in and use it to
-     * instantiate each of the 57 Icons in the icon[] array.
-    /**
-     * returns a new random card for the main to use in its tests
-     */
-    public static Card randomCardGenerator() {
-        // Use the methods above to get a random card and assign to string
-        // MIKE: turnIntIntoCardSuit is inaccessible from here, currently in GUICard class
-        String randomSuit = turnIntIntoCardSuit((int) (Math.random() * 3));     
-        String randomValue = turnIntIntoCardValue((int) (Math.random() * 13));
-        // Determine the suit of the random card from the string 
-        Card.Suit suit = null;
-        switch(randomSuit) {
-            case "C": suit = Card.Suit.CLUBS;
-                break;
-            case "D": suit = Card.Suit.DIAMONDS;
-                break;
-            case "H": suit = Card.Suit.HEARTS;
-                break;
-            case "S": suit = Card.Suit.SPADES;
-                break;
-            default:
-                break;
-        }
-        // The string randomValue should only be 1 character at the first index
-        return new Card(randomValue.charAt(0), suit);
-    }
-
     // a simple main to throw all the JLabels out there for the world to see
     public static void main(String[] args)
     {
@@ -75,12 +46,6 @@ class GameController
                         numUnusedCardsPerPack,unusedCardsPerPack, NUM_PLAYERS,
                         NUM_CARDS_PER_HAND);
         highCardGame.deal();
-        
-        //Decide winner and display the score of the game
-        // MIKE: bestCard and highCard don't exist anywhere else currently
-        if (bestCard > highCard) computerScore++;
-        else playerScore++;
-        updateGame();
     }
     //Display the score from the game between the computer and user
     private static void updateGame()
