@@ -1,6 +1,6 @@
 class GameModel
 {
-    private CardGameOutline GameModel;
+    private CardGameOutline gameModel;
     private static final int MAX_PLAYERS = 50;
 
     private int numPlayers;
