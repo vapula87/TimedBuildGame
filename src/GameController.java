@@ -26,43 +26,6 @@ class GameController
     /*
      * Build the file names. For each file name, read it in and use it to
      * instantiate each of the 57 Icons in the icon[] array.
-     */
-    static void loadCardIcons()
-    {
-       int indexTracker = 0;
-       for (int j = 0; j < 4; j++)
-       {
-           for (int k = 0; k < 14; k++)
-           {
-               String fileName = "images/" + turnIntIntoCardValue(k) +
-                       turnIntIntoCardSuit(j) + ".gif";
-               icon[indexTracker++] = new ImageIcon(fileName);
-           }
-       }
-       icon[indexTracker] = new ImageIcon("images/BK.gif");
-    }
-
-    // turns 0 - 13 into "A", "2", "3", ... "Q", "K", "X"
-    static String turnIntIntoCardValue(int k)
-    {
-       String[] cardValue = { "A", "2", "3", "4", "5", "6", "7", "8", "9", 
-             "T", "J", "Q", "K", "X" };
-       if (k > -1 && k < 14)
-          return cardValue[k];
-       else
-          return "";
-    }
-
-    // turns 0 - 3 into "C", "D", "H", "S"
-    static String turnIntIntoCardSuit(int j)
-    {
-       String[] cardSuit = { "C", "D", "H", "S" };
-       if (j > -1 && j < 4)
-          return cardSuit[j];
-       else
-          return "";
-    }
-
     /**
      * returns a new random card for the main to use in its tests
      */
@@ -111,94 +74,7 @@ class GameController
                         numUnusedCardsPerPack,unusedCardsPerPack, NUM_PLAYERS,
                         NUM_CARDS_PER_HAND);
         highCardGame.deal();
-
-        // CREATE LABELS ---------------------------------------------------
-        GUICard.loadCardIcons();
-        playLabelText[0] = new JLabel( "Computer", JLabel.CENTER );
-        playLabelText[1] = new JLabel( "User", JLabel.CENTER );
-        gameText = new JLabel("Welcome to the card game!", JLabel.CENTER);
-        gameStatus = new JLabel("Click a card from your hand to play!", JLabel.CENTER);
-        gameText.setForeground(Color.RED);
-        gameStatus.setForeground(Color.MAGENTA);
-        //Holds integer representations of card values for the computer
-        for (int count = 0; count < NUM_CARDS_PER_HAND; count++)
-        {
-            computerCards[count] = highCardGame.getHand(0).inspectCard(count).getValue();
-        }
-        for (card = 0; card < NUM_CARDS_PER_HAND; card++)
-        {
-            computerLabels[card] = new JLabel(GUICard.getBackCardIcon());
-            tempIcon = GUICard.getIcon(highCardGame.getHand(1).inspectCard(card));
-            humanLabels[card] = new JLabel(tempIcon);
-            //Mouse listener
-            humanLabels[card].addMouseListener(
-                    new MouseListener() {
-                        @Override
-                        public void mouseClicked(MouseEvent e) {
-                            playGame(myCardTable.pnlHumanHand.getComponentZOrder
-                                    (e.getComponent()), highCardGame);
-                        }
-
-                        @Override
-                        public void mousePressed(MouseEvent e) { }
-
-                        @Override
-                        public void mouseReleased(MouseEvent e) { }
-
-                        @Override
-                        public void mouseEntered(MouseEvent e) { }
-
-                        @Override
-                        public void mouseExited(MouseEvent e) { }
-                    }
-            );
-        }
-
-        // ADD LABELS TO PANELS -----------------------------------------
-        for (card = 0; card < NUM_CARDS_PER_HAND; card++)
-        {
-            myCardTable.pnlComputerHand.add(computerLabels[card]);
-            myCardTable.pnlHumanHand.add(humanLabels[card]);
-        }
-
-        tempIcon = GUICard.getBackCardIcon();
-        playedCardLabels[0] = new JLabel(tempIcon);
-        playedCardLabels[1] = new JLabel(tempIcon);
-
-        //Add the card labeling
-        myCardTable.pnlPlayArea.add(playedCardLabels[0]);
-        myCardTable.pnlPlayArea.add(gameText);
-        myCardTable.pnlPlayArea.add(playedCardLabels[1]);
-        myCardTable.pnlPlayArea.add(playLabelText[0]);
-        myCardTable.pnlPlayArea.add(gameStatus);
-        myCardTable.pnlPlayArea.add(playLabelText[1]);
-
-        // show everything to the user
-        myCardTable.setVisible(true);
-    }
-    //Creating certain functions to create the game
-    private static void playGame(int index, CardGameOutline highCardGame){
-        humanLabels[index].setVisible(false);
-        playedCardLabels[1].setIcon(humanLabels[index].getIcon());
-        computerPlay(highCardGame.getHand(1).inspectCard(index).getValue(),highCardGame);
-    }
-    private static void computerPlay(int highCard, CardGameOutline highCardGame)
-    {
-        int bestCard = 0;
-        int index = 0;
-        for (int count = 0; count < NUM_CARDS_PER_HAND; count++)
-        {
-            int cardValue = computerCards[count];
-            if (cardValue == -1) continue;
-            if (cardValue > bestCard) {
-                bestCard = cardValue;
-                index = count;
-            }
-        }
-        computerLabels[index].setVisible(false);
-        playedCardLabels[0].setIcon(GUICard.getIcon(highCardGame.getHand(0).inspectCard(index)));
-        computerCards[index] = -1;
-
+        
         //Decide winner and display the score of the game
         if (bestCard > highCard) computerScore++;
         else playerScore++;
