@@ -1,5 +1,6 @@
 class GameModel
 {
+    private CardGameOutline GameModel;
     private static final int MAX_PLAYERS = 50;
 
     private int numPlayers;
@@ -15,10 +16,12 @@ class GameModel
     // in the game.  e.g. pinochle does not
     // use cards 2-8 of any suit
 
-    public CardGameOutline( int numPacks, int numJokersPerPack,
+    public GameModel
+    {
+        this.gameModel = new CardGmeOutline(int numPacks, int numJokersPerPack,
                             int numUnusedCardsPerPack,  Card[] unusedCardsPerPack,
                             int numPlayers, int numCardsPerHand)
-    {
+    }
         int k;
 
         // filter bad values
@@ -57,7 +60,7 @@ class GameModel
     }
 
     // constructor overload/default for game like bridge
-    public CardGameOutline()
+    public GameModel()
     {
         this(1, 0, 0, null, 4, 13);
     }
