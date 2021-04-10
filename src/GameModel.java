@@ -1,6 +1,5 @@
 class GameModel
 {
-    private CardGameOutline gameModel;
     private static final int MAX_PLAYERS = 50;
 
     private int numPlayers;
@@ -16,12 +15,11 @@ class GameModel
     // in the game.  e.g. pinochle does not
     // use cards 2-8 of any suit
 
-    public GameModel
+    public GameModel(int numPacks, int numJokersPerPack,
+                     int numUnusedCardsPerPack,  Card[] unusedCardsPerPack,
+                     int numPlayers, int numCardsPerHand); 
     {
-        this.gameModel = new CardGmeOutline(int numPacks, int numJokersPerPack,
-                            int numUnusedCardsPerPack,  Card[] unusedCardsPerPack,
-                            int numPlayers, int numCardsPerHand)
-    }
+    
         int k;
 
         // filter bad values
