@@ -1,7 +1,6 @@
 import javax.swing.*;
 import java.awt.*;
 import javax.swing.Icon;
-import javax.swing.ImageIcon;
 
 class GameView extends JFrame {
     static int MAX_CARDS_PER_HAND = 56;
