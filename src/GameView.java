@@ -11,6 +11,10 @@ class GameView extends JFrame {
     private int numPlayers;
 
     public JPanel pnlComputerHand, pnlHumanHand, pnlPlayArea;
+    public static JLabel[] computerLabels, humanLabels, playedCardLabels, playLabelText;
+
+    public static JLabel gameText, gameStatus;
+
     //Filters input, adds panels to JFrame, establishes layouts
     public GameView(String title, int numCardsPerHand, int numPlayers) {
         super(title);
@@ -26,6 +30,12 @@ class GameView extends JFrame {
         pnlComputerHand = new JPanel();
         pnlHumanHand = new JPanel();
         pnlPlayArea = new JPanel();
+        gameText = new JLabel();
+        gameStatus = new JLabel();
+        computerLabels = new JLabel[numCardsPerHand];
+        humanLabels =  new JLabel[numCardsPerHand];
+        playedCardLabels  = new JLabel[numPlayers];
+        playLabelText  = new JLabel[numPlayers];
 
         //Layouts
         getContentPane().setLayout(new BoxLayout(getContentPane(), BoxLayout.PAGE_AXIS));
@@ -42,95 +52,50 @@ class GameView extends JFrame {
         add(pnlComputerHand);
         add(pnlPlayArea);
         add(pnlHumanHand);
+
+        // CREATE LABELS ---------------------------------------------------
+        GUICard.loadCardIcons();
+        playLabelText[0] = new JLabel( "Computer", JLabel.CENTER );
+        playLabelText[1] = new JLabel( "User", JLabel.CENTER );
+        gameText = new JLabel("Welcome to the card game!", JLabel.CENTER);
+        gameStatus = new JLabel("Click a card from your hand to play!", JLabel.CENTER);
+        gameText.setForeground(Color.RED);
+        gameStatus.setForeground(Color.MAGENTA);
+
+        // ADD LABELS TO PANELS -----------------------------------------
+        for (int card = 0; card < numCardsPerHand; card++)
+        {
+            computerLabels[card] = new JLabel(GUICard.getBackCardIcon());
+            humanLabels[card] = new JLabel();
+            pnlComputerHand.add(computerLabels[card]);
+            pnlHumanHand.add(humanLabels[card]);
+        }
+
+        Icon tempIcon = GUICard.getBackCardIcon();
+        playedCardLabels[0] = new JLabel(tempIcon);
+        playedCardLabels[1] = new JLabel(tempIcon);
+
+        //Add the card labeling
+        pnlPlayArea.add(playedCardLabels[0]);
+        pnlPlayArea.add(gameText);
+        pnlPlayArea.add(playedCardLabels[1]);
+        pnlPlayArea.add(playLabelText[0]);
+        pnlPlayArea.add(gameStatus);
+        pnlPlayArea.add(playLabelText[1]);
+
+        setVisible(true);
+
     }
+
     //Accessors
     public int getNumCardsPerHand() { return numCardsPerHand; }
     public int getNumPlayers() { return numPlayers; }
+
+    //Mutators
+    public void setLabel(int card, Icon icon) {
+        humanLabels[card].setIcon(icon);
+    }
 }
 
-class GUICard {
-    private static Icon[][] iconCards = new ImageIcon[14][4]; // 14 = A thru K + joker
-    private static Icon iconBack;
-    static boolean iconsLoaded = false;
 
-    /**
-     * Loads card icons into a 2D array. The card back icon
-     * is stored separately.
-     */
-    static void loadCardIcons() {
-        if (iconsLoaded) return;
-        for (int j = 0; j < 4; j++) {
-            for (int k = 0; k < 14; k++) {
-                String fileName = "images/" + Assig5.turnIntIntoCardValue(k) + // Referring to Assig5 here, these methods are currently in the GUICard class
-                        Assig5.turnIntIntoCardSuit(j) + ".gif";
-                iconCards[k][j] = new ImageIcon(fileName);
-            }
-        }
-        iconBack = new ImageIcon("images/BK.gif");
-        iconsLoaded = true;
-    }
-
-    /**
-     * Returns a card's icon.
-     *
-     * @return null on error
-     */
-    public static Icon getIcon(Card card) {
-        if (card.errorFlag()) return null;
-        int row = getRowFromChar(card.getValue());
-        int col = suitAsInt(card.getSuit());
-        if (iconCards[row][col] == null) return iconBack;
-        else return iconCards[row][col];
-    }
-
-    /**
-     * Returns the card back icon.
-     */
-    public static Icon getBackCardIcon() {
-        return iconBack;
-    }
-
-    /**
-     * Returns a card suit as an integer.
-     */
-    public static int suitAsInt(Card.Suit suit) {
-        switch (suit) {
-            case CLUBS:
-                return 0;
-            case DIAMONDS:
-                return 1;
-            case HEARTS:
-                return 2;
-            case SPADES:
-                return 3;
-            default:
-                return -1;
-        }
-    }
-
-    /**
-     * Returns the correct row for a card.
-     * @param character The card's value
-     */
-    public static int getRowFromChar(char character) {
-        switch (character) {
-            case 'A':
-                return 0;
-            case 'T':
-                return 9;
-            case 'J':
-                return 10;
-            case 'Q':
-                return 11;
-            case 'K':
-                return 12;
-            case 'X':
-                return 13;
-            default:
-                int charToInt = character - '0';
-                if (charToInt < 2 || charToInt > 9) return -1;
-                return --charToInt;
-        }
-    }
-    } 
 

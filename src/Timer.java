@@ -17,7 +17,7 @@ public class Timer extends Thread {
         try {
 
         }
-        catch (InterruptedException e) {
+        catch (Exception e) {
             e.printStackTrace();
         }
     }
