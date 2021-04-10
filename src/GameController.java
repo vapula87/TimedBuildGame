@@ -5,21 +5,13 @@ import javax.swing.*;
 
 class GameController
 {
-    // static for the 57 icons and their corresponding labels
-    // normally we would not have a separate label for each card, but
-    // if we want to display all at once using labels, we need to.
-
-    // 52 + 4 jokers + 1 back-of-card image
-    static final int NUM_CARD_IMAGES = 57;
     static int NUM_CARDS_PER_HAND = 7;
     static int  NUM_PLAYERS = 2;
-
     static int playerScore = 0, computerScore = 0;
     static int computerCards[] = new int[NUM_CARDS_PER_HAND];
 
     public GameController()
     {
-
         //Initiating the game from GameModel
         int card;
         Icon tempIcon;
@@ -45,12 +37,9 @@ class GameController
         for (int count = 0; count < NUM_CARDS_PER_HAND; count++)
             computerCards[count] = highCardGame.getHand(0).inspectCard(count).getValue();
 
+        //Add mouse listener to each player card
         for (card = 0; card < NUM_CARDS_PER_HAND; card++)
         {
-
-
-
-            //Mouse listener
             GameView.humanLabels[card].addMouseListener(
                     new MouseListener() {
                         @Override
@@ -58,33 +47,32 @@ class GameController
                             playGame(myCardTable.pnlHumanHand.getComponentZOrder
                                     (e.getComponent()), highCardGame);
                         }
-
-                        @Override
                         public void mousePressed(MouseEvent e) { }
-
                         @Override
                         public void mouseReleased(MouseEvent e) { }
-
                         @Override
                         public void mouseEntered(MouseEvent e) { }
-
                         @Override
                         public void mouseExited(MouseEvent e) { }
                     }
             );
         }
+
+        //Set player labels
         for (card = 0; card < NUM_CARDS_PER_HAND; card++)
         {
             tempIcon = GUICard.getIcon(highCardGame.getHand(1).inspectCard(card));
             myCardTable.setLabel(card, tempIcon);
         }
     }
+
     //Creating certain functions to create the game
     private static void playGame(int index, GameModel highCardGame){
         GameView.humanLabels[index].setVisible(false);
         GameView.playedCardLabels[1].setIcon(GameView.humanLabels[index].getIcon());
         computerPlay(highCardGame.getHand(1).inspectCard(index).getValue(),highCardGame);
     }
+
     private static void computerPlay(int highCard, GameModel highCardGame)
     {
         int bestCard = 0;
@@ -107,6 +95,7 @@ class GameController
         else playerScore++;
         updateGame();
     }
+
     //Display the score from the game between the computer and user
     private static void updateGame()
     {
