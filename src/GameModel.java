@@ -23,7 +23,7 @@ class GameModel
                      int numUnusedCardsPerPack,  Card[] unusedCardsPerPack,
                      int numPlayers, int numCardsPerHand)
     {
-    
+
         int k;
 
         // filter bad values
