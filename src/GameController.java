@@ -100,11 +100,18 @@ class GameController
     {
         GameView.gameStatus.setText("Score: " + computerScore + "-" + playerScore);
         if (computerScore + playerScore == NUM_CARDS_PER_HAND) {
-            if (computerScore > playerScore)
+            if (computerScore > playerScore) {
                 GameView.gameText.setText("Computer Wins!");
-            else if (playerScore > computerScore)
+                Timer.stop = true;
+            }
+            else if (playerScore > computerScore) {
                 GameView.gameText.setText("You win!");
-            else GameView.gameText.setText("Tie game!");
+                Timer.stop = true;
+            }
+            else {
+                GameView.gameText.setText("Tie game!"); 
+                Timer.stop = true;
+            }
         }
     }
 }

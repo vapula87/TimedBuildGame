@@ -8,25 +8,37 @@ import javax.swing.*;
 import java.awt.*;
 
 public class Timer extends Thread {
-    private static JLabel timer = new JLabel();
-    private static int seconds = 0;
-    private static int minutes = 0;
-    private static final int ONE_SECOND = 1000; // Milliseconds
+    // Flag to end the loop when the game is over
+    public static boolean stop = false;
+    private JLabel timer = new JLabel("", JLabel.CENTER);
+    private int seconds = 0;
+    private int minutes = 0;
+    private final int ONE_SECOND = 1000; // Milliseconds
 
     public Timer() {}
 
     @Override
     public void run() {
-        try {
-            timer.setText(minutes + ":" + String.format("%02d" + seconds));
-            
-        }
-        catch (Exception e) {
-            e.printStackTrace();
+        timer.setVerticalAlignment(JLabel.CENTER);
+        timer.setFont(new Font("Sans Serif", Font.BOLD, 40));
+        timer.setForeground(Color.RED);
+        while(stop == false) {
+            try {
+                timer.setText(minutes + ":" + String.format("%02d", seconds));
+                seconds++;
+                sleep(ONE_SECOND);
+                if (seconds == 60) {
+                    minutes++;
+                    seconds = 0;
+                }
+            }
+            catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 
-    public static JLabel getTimer() {
+    public JLabel getTimer() {
         try {
             return timer;
         }
