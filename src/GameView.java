@@ -11,8 +11,8 @@ class GameView extends JFrame {
 
     public JPanel pnlComputerHand, pnlHumanHand, pnlPlayArea;
     public static JLabel[] computerLabels, humanLabels, playedCardLabels, playLabelText;
-
     public static JLabel gameText, gameStatus;
+    public static Timer timerThread = new Timer();
 
     //Filters input, adds panels to JFrame, establishes layouts
     public GameView(String title, int numCardsPerHand, int numPlayers) {
@@ -39,7 +39,7 @@ class GameView extends JFrame {
         //Layouts
         getContentPane().setLayout(new BoxLayout(getContentPane(), BoxLayout.PAGE_AXIS));
         pnlComputerHand.setLayout(new GridLayout());
-        pnlPlayArea.setLayout(new GridLayout(2, 3));
+        pnlPlayArea.setLayout(new GridLayout(3, 3));
         pnlHumanHand.setLayout(new GridLayout());
 
         //Borders
@@ -81,7 +81,10 @@ class GameView extends JFrame {
         pnlPlayArea.add(playLabelText[0]);
         pnlPlayArea.add(gameStatus);
         pnlPlayArea.add(playLabelText[1]);
-
+        // Timer 
+        pnlPlayArea.add(new JLabel("Time Played:"));
+        timerThread.start();
+        pnlPlayArea.add(timerThread.getTimer()); 
         setVisible(true);
 
     }
