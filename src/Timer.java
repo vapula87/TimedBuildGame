@@ -21,7 +21,7 @@ public class Timer extends Thread {
             timer.setText(minutes + ":" + String.format("%02d" + seconds));
             
         }
-        catch (InterruptedException e) {
+        catch (Exception e) {
             e.printStackTrace();
         }
     }
