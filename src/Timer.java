@@ -20,7 +20,7 @@ public class Timer extends Thread {
     @Override
     public void run() {
         timer.setVerticalAlignment(JLabel.CENTER);
-        timer.setFont(new Font("Sans Serif", Font.BOLD, 40));
+        timer.setFont(new Font("Sans Serif", Font.BOLD, 20));
         timer.setForeground(Color.RED);
         while(stop == false) {
             try {
