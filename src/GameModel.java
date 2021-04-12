@@ -401,14 +401,14 @@ class Deck {
      * @return A card or null if none available
      */
     public Card dealCard() {
-        if (topCard == cards.length) return null;
+        if (topCard == cards.length) return new Card('M', Card.Suit.SPADES);
         else if (cards[topCard] != null) {
             Card dealtCard =        // Make an object copy of the top card
                     new Card(cards[topCard].getValue(), cards[topCard].getSuit());
             cards[topCard] = null;  // Remove the top card
             topCard++;              // Increment the top card "pointer"
             return dealtCard;       // Deal the card
-        } else return null;
+        } else return new Card('M', Card.Suit.SPADES);
     }
 
     public int getTopCard() {

@@ -5,14 +5,15 @@ import javax.swing.Icon;
 class GameView extends JFrame {
     static int MAX_CARDS_PER_HAND = 56;
     static int MAX_PLAYERS = 2;  // for now, we only allow 2 person games
+    static int NUM_STACKS = 3;
 
     private int numCardsPerHand;
     private int numPlayers;
 
     public JPanel pnlComputerHand, pnlHumanHand, pnlPlayArea;
-    public static JLabel[] computerLabels, humanLabels, playedCardLabels, playLabelText;
-
-    public static JLabel gameText, gameStatus;
+    public static JLabel[] computerLabels, humanLabels, playedCardLabels;
+    public static JButton cannotPlayButton;
+    public static JLabel gameText, gameStatus, cardsInDeck;
 
     //Filters input, adds panels to JFrame, establishes layouts
     public GameView(String title, int numCardsPerHand, int numPlayers) {
@@ -31,15 +32,15 @@ class GameView extends JFrame {
         pnlPlayArea = new JPanel();
         gameText = new JLabel();
         gameStatus = new JLabel();
+        cardsInDeck = new JLabel();
         computerLabels = new JLabel[numCardsPerHand];
         humanLabels =  new JLabel[numCardsPerHand];
-        playedCardLabels  = new JLabel[numPlayers];
-        playLabelText  = new JLabel[numPlayers];
+        playedCardLabels  = new JLabel[NUM_STACKS];
 
         //Layouts
         getContentPane().setLayout(new BoxLayout(getContentPane(), BoxLayout.PAGE_AXIS));
         pnlComputerHand.setLayout(new GridLayout());
-        pnlPlayArea.setLayout(new GridLayout(2, 3));
+        pnlPlayArea.setLayout(new GridLayout(0, 3));
         pnlHumanHand.setLayout(new GridLayout());
 
         //Borders
@@ -54,10 +55,11 @@ class GameView extends JFrame {
 
         // CREATE LABELS ---------------------------------------------------
         GUICard.loadCardIcons();
-        playLabelText[0] = new JLabel( "Computer", JLabel.CENTER );
-        playLabelText[1] = new JLabel( "User", JLabel.CENTER );
         gameText = new JLabel("Welcome to the card game!", JLabel.CENTER);
         gameStatus = new JLabel("Click a card from your hand to play!", JLabel.CENTER);
+        cardsInDeck = new JLabel("Number of cards in deck: ", JLabel.CENTER);
+        cannotPlayButton = new JButton("Cannot play");
+        
         gameText.setForeground(Color.RED);
         gameStatus.setForeground(Color.MAGENTA);
 
@@ -69,19 +71,20 @@ class GameView extends JFrame {
             pnlComputerHand.add(computerLabels[card]);
             pnlHumanHand.add(humanLabels[card]);
         }
-
+        pnlHumanHand.add(cannotPlayButton);
+        
         Icon tempIcon = GUICard.getBackCardIcon();
         playedCardLabels[0] = new JLabel(tempIcon);
         playedCardLabels[1] = new JLabel(tempIcon);
+        playedCardLabels[2] = new JLabel(tempIcon);
 
         //Add the card labeling
         pnlPlayArea.add(playedCardLabels[0]);
-        pnlPlayArea.add(gameText);
         pnlPlayArea.add(playedCardLabels[1]);
-        pnlPlayArea.add(playLabelText[0]);
+        pnlPlayArea.add(playedCardLabels[2]);
+        pnlPlayArea.add(gameText);
         pnlPlayArea.add(gameStatus);
-        pnlPlayArea.add(playLabelText[1]);
-
+        pnlPlayArea.add(cardsInDeck);
         setVisible(true);
 
     }
@@ -94,6 +97,10 @@ class GameView extends JFrame {
     public void setLabel(int card, Icon icon) {
         humanLabels[card].setIcon(icon);
     }
+    
+    public void setPlayedCardLabels(int card, Icon icon) {
+       playedCardLabels[card].setIcon(icon);
+   }
 }
 
 
