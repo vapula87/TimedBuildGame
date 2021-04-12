@@ -109,12 +109,16 @@ class GameView extends JFrame {
     public int getNumPlayers() { return numPlayers; }
 
     //Mutators
-    public void setLabel(int card, Icon icon) {
+    public boolean setLabel(int card, Icon icon) {
+        if (card < 0 || card >= humanLabels.length) return false;
         humanLabels[card].setIcon(icon);
+        return true;
     }
     
-    public void setPlayedCardLabels(int card, Icon icon) {
+    public boolean setPlayedCardLabels(int card, Icon icon) {
+       if (card < 0 || card >= humanLabels.length) return false;
        playedCardLabels[card].setIcon(icon);
+       return true;
    }
 }
 
