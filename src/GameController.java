@@ -10,9 +10,8 @@ class GameController
     static int  NUM_PLAYERS = 2;
     static int NUM_STACKS = 3;
     static int playerCannotPlays = 0, computerCannotPlays = 0;
-    static int computerCards[] = new int[NUM_CARDS_PER_HAND];
     Card stacks[] = new Card[NUM_STACKS];
-    boolean playerCannotPlay = false, computerCannotPlay = false;
+    boolean playerCannotPlay = false, computerCannotPlay = false, gameOver = false;
 
     public GameController()
     {
@@ -24,6 +23,7 @@ class GameController
         int numUnusedCardsPerPack = 0;
         Card[] unusedCardsPerPack = null;
 
+        //creates game BUILD
         GameModel BUILD = new GameModel(numPacksPerDeck,
                 numJokersPerPack, numUnusedCardsPerPack,unusedCardsPerPack,
                 NUM_PLAYERS, NUM_CARDS_PER_HAND);
@@ -35,16 +35,14 @@ class GameController
         myCardTable.setSize(850, 650);
         myCardTable.setLocationRelativeTo(null);
         myCardTable.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
-        //Holds integer representations of card values for the computer
-        for (int count = 0; count < NUM_CARDS_PER_HAND; count++)
-            computerCards[count] = BUILD.getHand(0).inspectCard(count).getValue();
-
+        
+        //stacks hold the top card on the stacks in play area
         for (int i = 0; i < NUM_STACKS; i++) {
            stacks[i] = BUILD.getCardFromDeck();
            myCardTable.setPlayedCardLabels(i, GUICard.getIcon(stacks[i]));
         }
         
+        //Set initial number of cards in deck after deal
         GameView.cardsInDeck.setText("Number of cards in deck: " + BUILD.getNumCardsRemainingInDeck());
         
         //Add mouse listener to each player card
@@ -54,8 +52,9 @@ class GameController
                     new MouseListener() {
                         @Override
                         public void mouseClicked(MouseEvent e) {
-                            playGame(myCardTable.pnlHumanHand.getComponentZOrder
-                                    (e.getComponent()), BUILD);
+                            if(!gameOver) {
+                               playGame(myCardTable.pnlHumanHand.getComponentZOrder(e.getComponent()), BUILD);
+                            }
                         }
                         public void mousePressed(MouseEvent e) { }
                         @Override
@@ -67,13 +66,16 @@ class GameController
                     }
             );
         }
+      //Add mouse listener to cannot play button
         GameView.cannotPlayButton.addMouseListener(
               new MouseListener() {
                  @Override
                  public void mouseClicked(MouseEvent e) {
-                    playerCannotPlay = true;
-                    playerCannotPlays++;
-                    computerPlay(BUILD);
+                    if(!gameOver) {
+                       playerCannotPlay = true;
+                       playerCannotPlays++;
+                       computerPlay(BUILD);
+                    }
                  }
                  @Override
                  public void mousePressed(MouseEvent e) { }
@@ -94,22 +96,24 @@ class GameController
 
     }
     
-    
-    //Creating certain functions to create the game
+    //This function handles the player's turn
     private void playGame(int index, GameModel game){
 
        int numCardsInHand = game.getHand(1).numCards - 1;
+       //check which stack card the clicked card can play on top of
         for(int i = 0; i < NUM_STACKS; i++) {
            int cardInHand = checkRank(game.getHand(1).inspectCard(index));
            int cardInStack = checkRank(stacks[i]);
            if(cardInStack == -1 || cardInHand == -1) {
               return;
            }
+           //compares if card rank is one higher or lower
            if(cardInHand == cardInStack + 1 || cardInHand == cardInStack - 1) {
               GameView.playedCardLabels[i].setIcon(GameView.humanLabels[index].getIcon());
               stacks[i] = game.getHand(1).inspectCard(index);
               game.getHand(1).playCard(index);
               game.getHand(1).takeCard(game.getCardFromDeck());
+              //shifts icons over for when new card is added to hand
               for(int j = index; j < numCardsInHand; j++) {
                  GameView.humanLabels[j].setIcon(GameView.humanLabels[j + 1].getIcon());
               }
@@ -121,9 +125,11 @@ class GameController
         resetStacks(game);
     }
 
+    //This function handles the computers's turn
     private void computerPlay(GameModel game)
     {
         boolean breakLoop = false;
+        //check if any card in computer hand can be played on top of any stack card
         for(int i = 0; i < stacks.length; i++) {
            for(int j = 0; j < game.getHand(0).numCards; j++) {
               int cardInHand = checkRank(game.getHand(0).inspectCard(j));
@@ -131,6 +137,7 @@ class GameController
               if(cardInStack == -1 || cardInHand == -1) {
                  return;
               }
+              //compares if card rank is one higher or lower
               if(cardInStack == cardInHand + 1 || cardInStack == cardInHand - 1) {
                  GameView.playedCardLabels[i].setIcon(GUICard.getIcon(game.getHand(0).inspectCard(j)));
                  stacks[i] = game.getHand(0).inspectCard(j);
@@ -146,29 +153,25 @@ class GameController
            computerCannotPlays++;
            computerCannotPlay = true;
         }
- 
-        
-        //Decide winner and display the score of the game
-        //if (bestCard > highCard) computerScore++;
-        //else playerScore++;
-        
         updateGame(game);
         resetStacks(game);
     }
     
+    //resets the stacks in the middle if the computer and player can't play
     private void resetStacks(GameModel game) {
-       if(computerCannotPlay && playerCannotPlay) {
+       if(computerCannotPlay && playerCannotPlay && !noCardsInDeck(game)) {
           for (int i = 0; i < NUM_STACKS; i++) {
              stacks[i] = game.getCardFromDeck();
              GameView.playedCardLabels[i].setIcon(GUICard.getIcon(stacks[i]));
-             noCardsInDeck(game);
+             if(noCardsInDeck(game))
+                i = NUM_STACKS;
           }
           computerCannotPlay = playerCannotPlay = false;
        }
        else return;
     }
     
-    //Display the score from the game between the computer and user
+    //Updates the display for the score and number of cards
     private void updateGame(GameModel game)
     {
         GameView.gameStatus.setText("Cannot play: Computer-" + computerCannotPlays + " Player-" + playerCannotPlays);
@@ -176,6 +179,7 @@ class GameController
         noCardsInDeck(game);
     }
     
+    //check if there's no cards in deck and ends game
     private boolean noCardsInDeck(GameModel game) {
        if(game.getNumCardsRemainingInDeck() < 1) {
           if (computerCannotPlays < playerCannotPlays)
@@ -184,11 +188,13 @@ class GameController
              GameView.gameText.setText("You win!");
           else GameView.gameText.setText("Tie game!");
           Timer.stop = true;
+          gameOver = true;
           return true;
        }
        else return false;
     }
     
+    //helper to check the rank of a card ex: X=0,A=1,2=2...T=10,J=11,Q=12,K=13
     private int checkRank(Card card) {
        for(int i = 0; i < Card.valuRanks.length; i++) {
           if(card.getValue() == Card.valuRanks[i]) {
@@ -198,6 +204,7 @@ class GameController
        return -1;
     }
     
+    //main function
     public static void main(String[] args) {
        new GameController();
    }
@@ -206,19 +213,19 @@ class GameController
 class Timer extends Thread {
    // Flag to end the loop when the game is over
    public static boolean stop = false;
-   private JLabel timer = new JLabel("", JLabel.CENTER);
+   
    private int seconds = 0;
    private int minutes = 0;
    private final int ONE_SECOND = 1000; // Milliseconds
    public Timer() {}
    @Override
    public void run() {
-       timer.setVerticalAlignment(JLabel.CENTER);
-       timer.setFont(new Font("Sans Serif", Font.BOLD, 20));
-       timer.setForeground(Color.RED);
+       GameView.timer.setVerticalAlignment(JLabel.CENTER);
+       GameView.timer.setFont(new Font("Sans Serif", Font.BOLD, 20));
+       GameView.timer.setForeground(Color.RED);
        while(stop == false) {
            try {
-               timer.setText(minutes + ":" + String.format("%02d", seconds));
+              GameView.timer.setText(minutes + ":" + String.format("%02d", seconds));
                seconds++;
                sleep(ONE_SECOND);
                if (seconds == 60) {
@@ -233,7 +240,7 @@ class Timer extends Thread {
    }
    public JLabel getTimer() {
        try {
-           return timer;
+           return GameView.timer;
        }
        catch (NullPointerException e) {
            e.printStackTrace();
