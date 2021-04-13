@@ -1,6 +1,5 @@
 import javax.swing.*;
 import java.awt.*;
-import javax.swing.Icon;
 
 class GameView extends JFrame {
     static int MAX_CARDS_PER_HAND = 56;
@@ -17,7 +16,7 @@ class GameView extends JFrame {
     public static JLabel gameText, gameStatus, cardsInDeck;
 
     public static JLabel[] computerLabels, humanLabels, playedCardLabels, playLabelText;
-    
+    public static JLabel timer = new JLabel("", JLabel.CENTER);
     public static Timer timerThread = new Timer();
 
     //Filters input, adds panels to JFrame, establishes layouts
