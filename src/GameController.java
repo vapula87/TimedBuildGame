@@ -1,3 +1,14 @@
+/**
+ * Lab 6: Timed Build Game
+ * CST 338: Software Design (Spring B 2021)
+ *
+ * MVC game where the user plays against the computer.
+ * There are three stacks in the middle where the user
+ * and computer take turns playing a card that is one
+ * higher or lower in value on one of the three stacks.
+ * If both users cannot play, the stacks get three new
+ * cards. Whoever has the least "cannot plays" wins.
+ */
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.MouseEvent;
